@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:mask_text_input_formatter/mask_text_input_formatter.dart';
 
 void main() {
   runApp(MaterialApp(home: MyApp()));
@@ -12,6 +13,11 @@ class MyApp extends StatefulWidget {
 class _MyPageState extends State<MyApp> {
   late TextEditingController controller;
   bool isButtonActive = true;
+  final maskFormatter = MaskTextInputFormatter(
+      mask: '(###) ###-####',
+      filter: { "#": RegExp(r'[0-9]') },
+      type: MaskAutoCompletionType.lazy
+  );
 
   @override
   void initState() {
@@ -76,6 +82,7 @@ class _MyPageState extends State<MyApp> {
                       icon: Icon(Icons.clear),
                     ),
                   ),
+                  inputFormatters: [maskFormatter],
                 ),
                 Row(
                   children: [

@@ -10,7 +10,20 @@ class MyApp extends StatefulWidget {
 }
 
 class _MyPageState extends State<MyApp> {
-  var _controller = TextEditingController();
+  late TextEditingController controller;
+  bool isButtonActive = true;
+
+  @override
+  void initState() {
+    super.initState();
+
+    controller = TextEditingController();
+    controller.addListener(() {
+      final isButtonActive = controller.text.isNotEmpty;
+
+      setState(() => this.isButtonActive = isButtonActive);
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -55,11 +68,11 @@ class _MyPageState extends State<MyApp> {
             child: Column(
               children: [
                 TextField(
-                  controller: _controller,
+                  controller: controller,
                   decoration: InputDecoration(
                     hintText: "(201) 555-0123",
                     suffixIcon: IconButton(
-                      onPressed: _controller.clear,
+                      onPressed: controller.clear,
                       icon: Icon(Icons.clear),
                     ),
                   ),
@@ -81,7 +94,12 @@ class _MyPageState extends State<MyApp> {
                       backgroundColor: Colors.blue,
                       child: IconButton(
                         color: Colors.white,
-                        onPressed: () {},
+                        onPressed: isButtonActive
+                          ? () {
+                            setState(() => isButtonActive = false);
+                            controller.clear();
+                            }
+                          : null,
                         icon: Icon(Icons.arrow_forward),
                       ),),
                   ],
